@@ -145,12 +145,12 @@ examples =
                 data List = Empty | Node Int List
 
 
-                > In Haskell, these are referred to as ‘Algebraic Data Types’ (ADT).
+                > In Haskell these are called ‘Algebraic Data Types’ (ADT).
 
 
                 > If you only have a single constructor, you can use ‘newtype’.
-                > This is super useful for creating custom versions of primitive types.
-                > See: http://dev.stephendiehl.com/hask/#newtype-deriving
+                > This is super useful for creating custom versions of primitive
+                > types, See: http://dev.stephendiehl.com/hask/#newtype-deriving
 
                 newtype PersonId = PersonId Int
                 """
@@ -207,8 +207,8 @@ examples =
 
 
                 > Haskell records are always wrapped in a type as shown above.
-                > The record `{ x :: Int, y :: Int }` is not a type on its own like in Elm,
-                > and so it can not be aliased.
+                > The record `{ x :: Int, y :: Int }` is not a type on its own
+                > like in Elm, and so it can not be aliased.
                 """
       }
     , { description = "Functions"
