@@ -53,6 +53,35 @@ main =
                                     ]
                                     []
                                 , el
+                                , Html.footer
+                                    [ Attr.css
+                                        [ Css.textAlign Css.center
+                                        , Css.opacity (Css.num 0.6)
+                                        , Css.marginTop (Css.px 50)
+                                        , Css.color (Css.hex "#fff")
+                                        , Css.paddingBottom (Css.px 10)
+                                        , Css.textShadow4 Css.zero Css.zero (Css.px 10) (Css.hex "#333")
+                                        ]
+                                    ]
+                                    [ Html.text "© 2020 Jasper Woudenberg - "
+                                    , Html.a
+                                        [ Attr.css
+                                            [ Css.color Css.inherit
+                                            ]
+                                        , Attr.href "https://github.com/jwoudenberg/elm-to-haskell"
+                                        ]
+                                        [ Html.text "This Code"
+                                        ]
+                                    , Html.text " - "
+                                    , Html.a
+                                        [ Attr.css
+                                            [ Css.color Css.inherit
+                                            ]
+                                        , Attr.href "https://dev.to/jwoudenberg"
+                                        ]
+                                        [ Html.text "My Blog"
+                                        ]
+                                    ]
                                 ]
                        )
                     |> Html.toUnstyled
@@ -74,10 +103,10 @@ viewExample example =
                     lines code
 
         linesHtmlElm =
-            List.map viewLine (fillUpToMax linesElm)
+            List.map viewLineLeft (fillUpToMax linesElm)
 
         linesHtmlHaskell =
-            List.map viewLine (fillUpToMax linesHaskell)
+            List.map viewLineRight (fillUpToMax linesHaskell)
 
         numLines =
             max (List.length linesElm) (List.length linesHaskell)
@@ -118,17 +147,35 @@ lines string =
         |> String.split "\n"
 
 
-viewLine : String -> Html msg
-viewLine line =
+viewLineLeft : String -> Html msg
+viewLineLeft line =
     Html.span
         [ Attr.css
-            [ Css.display Css.block
-            , Css.borderBottom3 (Css.px 1) Css.solid (Css.hex "#ddd")
-            , Css.marginTop (Css.px 3)
-            , Css.padding2 Css.zero (Css.px 5)
+            [ Css.paddingLeft (Css.px 10)
+            , lineStyles
             ]
         ]
         [ Html.text line ]
+
+
+viewLineRight : String -> Html msg
+viewLineRight line =
+    Html.span
+        [ Attr.css
+            [ Css.paddingRight (Css.px 10)
+            , lineStyles
+            ]
+        ]
+        [ Html.text line ]
+
+
+lineStyles : Css.Style
+lineStyles =
+    Css.batch
+        [ Css.display Css.block
+        , Css.borderBottom3 (Css.px 1) Css.solid (Css.hex "#ddd")
+        , Css.marginTop (Css.px 3)
+        ]
 
 
 codeStyles : Css.Style
