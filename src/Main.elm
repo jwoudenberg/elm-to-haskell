@@ -92,7 +92,7 @@ viewExample : Authored.Example -> Html msg
 viewExample example =
     let
         linesElm =
-            lines example.elm
+            toLines example.elm
 
         linesHaskell =
             case example.haskell of
@@ -100,7 +100,7 @@ viewExample example =
                     []
 
                 Just code ->
-                    lines code
+                    toLines code
 
         linesHtmlElm =
             List.map viewLineLeft (fillUpToMax linesElm)
@@ -111,8 +111,8 @@ viewExample example =
         numLines =
             max (List.length linesElm) (List.length linesHaskell)
 
-        fillUpToMax lines_ =
-            [ "" ] ++ lines_ ++ List.repeat (1 + numLines - List.length lines_) ""
+        fillUpToMax lines =
+            [ "" ] ++ lines ++ List.repeat (1 + numLines - List.length lines) ""
     in
     Html.section []
         [ Html.h2
@@ -140,8 +140,8 @@ viewExample example =
         ]
 
 
-lines : String -> List String
-lines string =
+toLines : String -> List String
+toLines string =
     unindent string
         |> String.split "\n"
         |> dropLeadingEmptyLines
@@ -151,8 +151,8 @@ lines string =
 
 
 dropLeadingEmptyLines : List String -> List String
-dropLeadingEmptyLines lines_ =
-    case lines_ of
+dropLeadingEmptyLines lines =
+    case lines of
         [] ->
             []
 
@@ -160,7 +160,7 @@ dropLeadingEmptyLines lines_ =
             rest
 
         _ ->
-            lines_
+            lines
 
 
 viewLineLeft : String -> Html msg
