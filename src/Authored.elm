@@ -450,13 +450,6 @@ examples =
             data User
               = Regular String Int
               | Visitor String
-
-            > In Haskell these are called ‘Algebraic Data Types’ (ADT).
-            > If you only have a single constructor, you can use ‘newtype’.
-            > This is super useful for creating custom versions of primitive
-            > types, See: http://dev.stephendiehl.com/hask/#newtype-deriving
-
-            newtype PersonId = PersonId Int
             """
       }
     , { description = "JavaScript Interop"

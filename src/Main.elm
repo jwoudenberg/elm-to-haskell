@@ -28,7 +28,7 @@ main =
                     :: List.map viewExample Authored.examples
                     |> Html.div
                         [ Attr.css
-                            [ Css.width (Css.px 1024)
+                            [ Css.width (Css.px 900)
                             , Css.margin2 Css.zero Css.auto
                             , Css.fontFamilies [ "Helvetica Neue", "Helvetica", "Arial", "sans-serif" ]
                             , Css.position Css.relative
