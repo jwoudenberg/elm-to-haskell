@@ -15,76 +15,84 @@ main =
         , update = \_ _ -> ()
         , view =
             \_ ->
-                Html.h1
-                    [ Attr.css
-                        [ Css.textAlign Css.right
-                        , Css.fontWeight Css.lighter
-                        , Css.fontSize (Css.em 3)
-                        , Css.textShadow4 Css.zero Css.zero (Css.px 10) (Css.hex "#000")
-                        , Css.color (Css.hex "#fff")
-                        ]
-                    ]
-                    [ Html.text "Elm to Haskell" ]
-                    :: List.map viewExample Authored.examples
-                    |> Html.div
+                Html.toUnstyled <|
+                    Html.div
                         [ Attr.css
-                            [ Css.width (Css.px 900)
-                            , Css.margin2 Css.zero Css.auto
-                            , Css.fontFamilies [ "Helvetica Neue", "Helvetica", "Arial", "sans-serif" ]
-                            , Css.position Css.relative
+                            [ Css.minWidth (Css.vw 100)
+                            , Css.minHeight (Css.vh 100)
+                            , Css.backgroundColor (Css.hex "#5E5184")
+                            , Css.position Css.absolute
                             ]
                         ]
-                    |> (\el ->
-                            Html.div
+                        [ Html.div
+                            [ Attr.css
+                                [ Css.position Css.absolute
+                                , Css.width (Css.pct 50)
+                                , Css.height (Css.pct 100)
+                                , Css.backgroundColor (Css.hex "#1293D8")
+                                ]
+                            ]
+                            []
+                        , Html.div
+                            [ Attr.css
+                                [ Css.width (Css.px 900)
+                                , Css.margin2 Css.zero Css.auto
+                                , Css.fontFamilies [ "Helvetica Neue", "Helvetica", "Arial", "sans-serif" ]
+                                , Css.position Css.relative
+                                ]
+                            ]
+                            (Html.h1
                                 [ Attr.css
-                                    [ Css.minWidth (Css.vw 100)
-                                    , Css.minHeight (Css.vh 100)
-                                    , Css.backgroundColor (Css.hex "#5E5184")
-                                    , Css.position Css.absolute
+                                    [ Css.textAlign Css.right
+                                    , Css.fontWeight Css.lighter
+                                    , Css.fontSize (Css.em 3)
+                                    , Css.textShadow4 Css.zero Css.zero (Css.px 10) (Css.hex "#000")
+                                    , Css.color (Css.hex "#fff")
                                     ]
                                 ]
-                                [ Html.div
-                                    [ Attr.css
-                                        [ Css.position Css.absolute
-                                        , Css.width (Css.pct 50)
-                                        , Css.height (Css.pct 100)
-                                        , Css.backgroundColor (Css.hex "#1293D8")
-                                        ]
-                                    ]
-                                    []
-                                , el
-                                , Html.footer
-                                    [ Attr.css
-                                        [ Css.textAlign Css.center
-                                        , Css.opacity (Css.num 0.6)
-                                        , Css.marginTop (Css.px 50)
-                                        , Css.color (Css.hex "#fff")
-                                        , Css.paddingBottom (Css.px 10)
-                                        , Css.textShadow4 Css.zero Css.zero (Css.px 10) (Css.hex "#333")
-                                        ]
-                                    ]
-                                    [ Html.text "© 2020 Jasper Woudenberg - "
-                                    , Html.a
-                                        [ Attr.css
-                                            [ Css.color Css.inherit
-                                            ]
-                                        , Attr.href "https://github.com/jwoudenberg/elm-to-haskell"
-                                        ]
-                                        [ Html.text "This Code"
-                                        ]
-                                    , Html.text " - "
-                                    , Html.a
-                                        [ Attr.css
-                                            [ Css.color Css.inherit
-                                            ]
-                                        , Attr.href "https://dev.to/jwoudenberg"
-                                        ]
-                                        [ Html.text "My Blog"
-                                        ]
-                                    ]
+                                [ Html.text "Elm to Haskell" ]
+                                :: List.map viewExample Authored.examples
+                            )
+                        , Html.footer
+                            [ Attr.css
+                                [ Css.textAlign Css.center
+                                , Css.opacity (Css.num 0.6)
+                                , Css.marginTop (Css.px 50)
+                                , Css.color (Css.hex "#fff")
+                                , Css.paddingBottom (Css.px 10)
+                                , Css.textShadow4 Css.zero Css.zero (Css.px 10) (Css.hex "#333")
+                                , Css.lineHeight (Css.em 2)
                                 ]
-                       )
-                    |> Html.toUnstyled
+                            ]
+                            [ Html.text "Elm examples come from "
+                            , Html.a
+                                [ Attr.href "https://elm-lang.org/docs/syntax"
+                                , Attr.css
+                                    [ Css.color Css.inherit ]
+                                ]
+                                [ Html.text "elm-lang.org/docs/syntax"
+                                ]
+                            , Html.br [] []
+                            , Html.text "© 2020 Jasper Woudenberg - "
+                            , Html.a
+                                [ Attr.css
+                                    [ Css.color Css.inherit
+                                    ]
+                                , Attr.href "https://github.com/jwoudenberg/elm-to-haskell"
+                                ]
+                                [ Html.text "This Code"
+                                ]
+                            , Html.text " - "
+                            , Html.a
+                                [ Attr.css
+                                    [ Css.color Css.inherit
+                                    ]
+                                , Attr.href "https://dev.to/jwoudenberg"
+                                ]
+                                [ Html.text "My Blog"
+                                ]
+                            ]
+                        ]
         }
 
 
