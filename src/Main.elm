@@ -2,11 +2,13 @@ module Main exposing (main)
 
 import Authored
 import Browser
+import Browser.Dom as Dom
 import Css
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attr
 import Html.Styled.Events as Events
 import String.Extra exposing (unindent)
+import Task
 
 
 type alias Model =
@@ -15,24 +17,35 @@ type alias Model =
 
 
 type Msg
-    = SetSearchTerm String
+    = NoOp
+    | SetSearchTerm String
 
 
 main : Program () Model Msg
 main =
-    Browser.sandbox
-        { init = { searchTerm = "" }
+    Browser.element
+        { init =
+            \_ ->
+                ( { searchTerm = "" }
+                , Task.attempt (\_ -> NoOp) (Dom.focus "search-box")
+                )
         , update =
             \msg model ->
                 case msg of
+                    NoOp ->
+                        ( model, Cmd.none )
+
                     SetSearchTerm newTerm ->
-                        { model | searchTerm = newTerm }
+                        ( { model | searchTerm = newTerm }
+                        , Cmd.none
+                        )
         , view =
             \model ->
                 Authored.examples
                     |> List.filter (isMatch model.searchTerm)
                     |> view
                     |> Html.toUnstyled
+        , subscriptions = \_ -> Sub.none
         }
 
 
@@ -95,7 +108,8 @@ viewHeader =
             ]
             [ Html.text "Elm to Haskell" ]
         , Html.input
-            [ Attr.css
+            [ Attr.id "search-box"
+            , Attr.css
                 [ Css.position Css.absolute
                 , Css.right Css.zero
                 , Css.padding (Css.px 10)
