@@ -56,7 +56,7 @@ examples =
                 |
                 "\\
                 \\This is not at all useful for holding JSON or\\n
-                \\content that has "quotation marks".\\n
+                \\content that has \\"quotation marks\\".\\n
                 \\"
                 |
                 |
