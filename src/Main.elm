@@ -95,42 +95,22 @@ viewExample example =
             toLines example.elm
 
         linesHaskell =
-            case example.haskell of
-                Nothing ->
-                    List.map (\_ -> "|") linesElm
-
-                Just code ->
-                    toLines code
+            toLines example.haskell
 
         linesHtmlElm =
-            map2WithMaybes
-                (\maybeElmLine _ ->
-                    case maybeElmLine of
-                        Just elmLine ->
-                            viewLineLeft elmLine
-
-                        Nothing ->
-                            viewLineLeft ""
-                )
+            map2Lines
+                (\elmLine _ -> viewLineLeft elmLine)
                 linesElm
                 linesHaskell
 
         linesHtmlHaskell =
-            map2WithMaybes
-                (\maybeElmLine maybeHaskellLine ->
-                    case ( maybeElmLine, maybeHaskellLine ) of
-                        ( Just elmLine, Just haskellLine ) ->
-                            if String.trim haskellLine == "|" then
-                                viewGrayLineRight elmLine
+            map2Lines
+                (\elmLine haskellLine ->
+                    if String.trim elmLine == String.trim haskellLine then
+                        viewGrayLineRight haskellLine
 
-                            else
-                                viewLineRight haskellLine
-
-                        ( _, Just haskellLine ) ->
-                            viewLineRight haskellLine
-
-                        _ ->
-                            viewLineRight ""
+                    else
+                        viewLineRight haskellLine
                 )
                 linesElm
                 linesHaskell
@@ -219,9 +199,9 @@ codeStyles =
         ]
 
 
-map2WithMaybes : (Maybe a -> Maybe b -> c) -> List a -> List b -> List c
-map2WithMaybes f list1 list2 =
+map2Lines : (String -> String -> a) -> List String -> List String -> List a
+map2Lines f list1 list2 =
     List.map2
         f
-        (List.map Just list1 ++ List.repeat (List.length list2 - List.length list1) Nothing)
-        (List.map Just list2 ++ List.repeat (List.length list1 - List.length list2) Nothing)
+        (list1 ++ List.repeat (List.length list2 - List.length list1) "")
+        (list2 ++ List.repeat (List.length list1 - List.length list2) "")
