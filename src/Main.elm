@@ -3,30 +3,37 @@ module Main exposing (main)
 import Authored
 import Browser
 import Browser.Dom as Dom
+import Browser.Navigation as Navigation
 import Css
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attr
 import Html.Styled.Events as Events
 import String.Extra exposing (unindent)
 import Task
+import Url exposing (Url)
+import Url.Builder
+import Url.Parser
+import Url.Parser.Query
 
 
 type alias Model =
     { searchTerm : String
+    , key : Navigation.Key
     }
 
 
 type Msg
     = NoOp
     | SetSearchTerm String
+    | NavigateAway String
 
 
 main : Program () Model Msg
 main =
-    Browser.element
+    Browser.application
         { init =
-            \_ ->
-                ( { searchTerm = "" }
+            \_ url key ->
+                ( { searchTerm = parseUrl url, key = key }
                 , Task.attempt (\_ -> NoOp) (Dom.focus "search-box")
                 )
         , update =
@@ -37,16 +44,52 @@ main =
 
                     SetSearchTerm newTerm ->
                         ( { model | searchTerm = newTerm }
-                        , Cmd.none
+                        , if newTerm == model.searchTerm then
+                            Cmd.none
+
+                          else
+                            Navigation.replaceUrl model.key (toUrl newTerm)
+                        )
+
+                    NavigateAway url ->
+                        ( model
+                        , Navigation.load url
                         )
         , view =
             \model ->
-                Authored.examples
-                    |> List.filter (isMatch model.searchTerm)
-                    |> view
-                    |> Html.toUnstyled
+                { title = "Elm to Haskell"
+                , body =
+                    [ Authored.examples
+                        |> List.filter (isMatch model.searchTerm)
+                        |> view model.searchTerm
+                        |> Html.toUnstyled
+                    ]
+                }
         , subscriptions = \_ -> Sub.none
+        , onUrlRequest =
+            \req ->
+                case req of
+                    Browser.External url ->
+                        NavigateAway url
+
+                    Browser.Internal url ->
+                        SetSearchTerm (parseUrl url)
+        , onUrlChange = \url -> SetSearchTerm (parseUrl url)
         }
+
+
+parseUrl : Url -> String
+parseUrl url =
+    Url.Parser.parse
+        (Url.Parser.query (Url.Parser.Query.string "search"))
+        url
+        |> Maybe.andThen identity
+        |> Maybe.withDefault ""
+
+
+toUrl : String -> String
+toUrl term =
+    "/" ++ Url.Builder.relative [] [ Url.Builder.string "search" term ]
 
 
 isMatch : String -> Authored.Example -> Bool
@@ -56,8 +99,8 @@ isMatch term example =
         || String.contains (String.toLower term) (String.toLower example.haskell)
 
 
-view : List Authored.Example -> Html Msg
-view examples =
+view : String -> List Authored.Example -> Html Msg
+view searchTerm examples =
     Html.div
         [ Attr.css
             [ Css.minWidth (Css.vw 100)
@@ -87,15 +130,15 @@ view examples =
                 , Css.minHeight (Css.vh 100)
                 ]
             ]
-            [ viewHeader
+            [ viewHeader searchTerm
             , viewContent examples
             , viewFooter
             ]
         ]
 
 
-viewHeader : Html Msg
-viewHeader =
+viewHeader : String -> Html Msg
+viewHeader searchTerm =
     Html.div []
         [ Html.h1
             [ Attr.css
@@ -109,6 +152,7 @@ viewHeader =
             [ Html.text "Elm to Haskell" ]
         , Html.input
             [ Attr.id "search-box"
+            , Attr.value searchTerm
             , Attr.css
                 [ Css.position Css.absolute
                 , Css.right Css.zero

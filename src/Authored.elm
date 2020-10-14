@@ -37,7 +37,7 @@ examples =
             42    : number  -- Int or Float depending on usage
             3.14  : Float
 
-            '`a'   : Char`
+            'a'   : Char
             "abc" : String
 
             \"\"\"
@@ -57,7 +57,7 @@ examples =
             42    : number  -- Int or Float depending on usage
             3.14  : Float
 
-            '`a'   : Char`
+            'a'   : Char
             "abc" : String
 
             "\\
