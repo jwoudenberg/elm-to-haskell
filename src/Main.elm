@@ -52,6 +52,23 @@ main =
                                 ]
                                 [ Html.text "Elm to Haskell" ]
                                 :: List.map viewExample Authored.examples
+                                ++ [ Html.div
+                                        [ Attr.css
+                                            [ Css.marginTop (Css.px 10)
+                                            , Css.color (Css.hex "#fff")
+                                            , Css.opacity (Css.num 0.9)
+                                            ]
+                                        ]
+                                        [ Html.text "All Elm examples come from "
+                                        , Html.a
+                                            [ Attr.href "https://elm-lang.org/docs/syntax"
+                                            , Attr.css
+                                                [ Css.color Css.inherit ]
+                                            ]
+                                            [ Html.text "elm-lang.org/docs/syntax"
+                                            ]
+                                        ]
+                                   ]
                             )
                         , Html.footer
                             [ Attr.css
@@ -64,16 +81,7 @@ main =
                                 , Css.lineHeight (Css.em 2)
                                 ]
                             ]
-                            [ Html.text "Elm examples come from "
-                            , Html.a
-                                [ Attr.href "https://elm-lang.org/docs/syntax"
-                                , Attr.css
-                                    [ Css.color Css.inherit ]
-                                ]
-                                [ Html.text "elm-lang.org/docs/syntax"
-                                ]
-                            , Html.br [] []
-                            , Html.text "© 2020 Jasper Woudenberg - "
+                            [ Html.text "© 2020 Jasper Woudenberg - "
                             , Html.a
                                 [ Attr.css
                                     [ Css.color Css.inherit
