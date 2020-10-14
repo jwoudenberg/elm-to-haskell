@@ -124,7 +124,7 @@ viewExample example =
                                 viewGrayLineRight elmLine
 
                             else
-                                viewGrayLineRight elmLine
+                                viewLineRight haskellLine
 
                         ( _, Just haskellLine ) ->
                             viewLineRight haskellLine
