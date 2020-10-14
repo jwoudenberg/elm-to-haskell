@@ -143,8 +143,24 @@ viewExample example =
 lines : String -> List String
 lines string =
     unindent string
-        |> String.trim
         |> String.split "\n"
+        |> dropLeadingEmptyLines
+        |> List.reverse
+        |> dropLeadingEmptyLines
+        |> List.reverse
+
+
+dropLeadingEmptyLines : List String -> List String
+dropLeadingEmptyLines lines_ =
+    case lines_ of
+        [] ->
+            []
+
+        "" :: rest ->
+            rest
+
+        _ ->
+            lines_
 
 
 viewLineLeft : String -> Html msg
