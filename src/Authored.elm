@@ -101,10 +101,10 @@ examples =
               Nothing -> []
 
             case xs of
-              hd::tl ->
-                Just (hd,tl)
               [] ->
                 Nothing
+              first :: rest ->
+                Just (first, rest)
 
             case n of
               0 -> 1
@@ -127,10 +127,10 @@ examples =
               Nothing -> []
 
             case xs of
-              hd : tl ->
-                Just (hd,tl)
               [] ->
                 Nothing
+              first : rest ->
+                Just (first, rest)
 
             case n of
               0 -> 1
@@ -138,79 +138,38 @@ examples =
               _ -> fib (n-1) + fib (n-2)
             """
       }
-    , { description = "Union Types"
-      , elm =
-            """
-            type List = Empty | Node Int List
-            """
-      , haskell =
-            """
-            data List = Empty | Node Int List
-
-
-            > In Haskell these are called ‘Algebraic Data Types’ (ADT).
-
-
-            > If you only have a single constructor, you can use ‘newtype’.
-            > This is super useful for creating custom versions of primitive
-            > types, See: http://dev.stephendiehl.com/hask/#newtype-deriving
-
-            newtype PersonId = PersonId Int
-            """
-      }
     , { description = "Records"
       , elm =
             """
-            point =                         -- create a record
-              { x = 3, y = 4 }
-
-            point.x                         -- access field
-
-            List.map .x [point,{x=0,y=0}]   -- field access function
-
-            { point | x = 6 }               -- update a field
-
-            { point |                       -- update many fields
-                x = point.x + 1,
-                y = point.y + 1
-            }
-
-            dist {x,y} =                    -- pattern matching on fields
-              sqrt (x^2 + y^2)
 
 
+            origin = { x = 0, y = 0 }
+            point = { x = 3, y = 4 }
 
-            type alias Location =           -- type aliases for records
-              { line : Int
-              , column : Int
-              }
+            origin.x == 0
+            point.x == 3
+
+            List.map .x [ origin, point ] == [ 0, 3 ]
+
+            { point | x = 6 } == { x = 6, y = 4 }
+
+            { point | x = point.x + 1, y = point.y + 1 }
             """
       , haskell =
             """
             data Point = Point { x :: Int, y :: Int }
+
+            origin = Point { x = 0, y = 0 }
             point = Point { x = 3, y = 4 }
 
-            x point
+            x origin == 0
+            x point == 0
 
-            fmap x [point, Point { x = 0, y = 0 }]
+            fmap x [ origin, point ] == [ 0, 3 ]
 
-            point { x = 6 }
+            point { x = 6 } == Point { x = 6, y = 4 }
 
-            point {
-              x = x point + 1,
-              y = y point + 1
-            }
-
-            dist (Point {x,y}) =
-              sqrt (x^2 + y^2)
-
-
-            > The above example uses the NamedFieldPuns language extension
-
-
-            > Haskell records are always wrapped in a type as shown above.
-            > The record `{ x :: Int, y :: Int }` is not a type on its own
-            > like in Elm, and so it can not be aliased.
+            point { x = x point + 1, y = y point + 1 }
             """
       }
     , { description = "Functions"
@@ -255,15 +214,9 @@ examples =
               fmap (\\n -> n^2) [1..100]
             """
       }
-    , { description = "Infix Operators"
+    , { description = "Operators"
       , elm =
             """
-            (?) : Maybe a -> a -> a
-            (?) maybe default =
-              Maybe.withDefault default maybe
-
-            infixr 9 ?
-
             viewNames1 names =
               String.join ", " (List.sort names)
 
@@ -274,20 +227,13 @@ examples =
             """
       , haskell =
             """
-            (?) :: Maybe a -> a -> a
-            m ? default = maybe default id m
-
-
-            infixr 9 ?
-
             viewNames1 names =
               Data.List.intercalate ", " (Data.List.sort names)
 
-            viewNames2 =
-              Data.List.intercalate ", " . Data.List.sort
-
-
-            > `.` does in Haskell as `<<` does in Elm.
+            viewNames2 names =
+              names
+                & Data.List.sort
+                & Data.List.intercalate ", "
             """
       }
     , { description = "Let Expressions"
@@ -296,6 +242,7 @@ examples =
             let
               twentyFour =
                 3 * 8
+
               sixteen =
                 4 ^ 2
             in
@@ -304,6 +251,7 @@ examples =
             let
               ( three, four ) =
                 ( 3, 4 )
+
               hypotenuse a b =
                 sqrt (a^2 + b^2)
             in
@@ -313,6 +261,7 @@ examples =
               name : String
               name =
                 "Hermann"
+
               increment : Int -> Int
               increment n =
                 n + 1
@@ -324,6 +273,7 @@ examples =
             let
               twentyFour =
                 3 * 8
+
               sixteen =
                 4 ^ 2
             in
@@ -332,6 +282,7 @@ examples =
             let
               ( three, four ) =
                 ( 3, 4 )
+
               hypotenuse a b =
                 sqrt (a^2 + b^2)
             in
@@ -341,6 +292,7 @@ examples =
               name :: String
               name =
                 "Hermann"
+
               increment :: Int -> Int
               increment n =
                 n + 1
@@ -369,11 +321,8 @@ examples =
             6 * 7      : number
             10 * 4.2   : Float
 
-            100 // 2  : Int
-            1 / 2     : Float
-
-            (,) 1 2              == (1,2)
-            (,,,) 1 True 'a' []  == (1,True,'a',[])
+            100 // 2   : Int
+            1 / 2      : Float
             """
       , haskell =
             """
@@ -395,11 +344,8 @@ examples =
             6 * 7      :: Number t => t
             10 * 4.2   :: Float
 
-            quot 100 2  :: Int
-            1 / 2       :: Float
-
-            (,) 1 2              == (1,2)
-            (,,,) 1 True 'a' []  == (1,True,'a',[])
+            quot 100 2 :: Int
+            1 / 2      :: Float
             """
       }
     , { description = "Modules"
@@ -407,15 +353,14 @@ examples =
             """
             module MyModule exposing (..)
 
-            import List                    -- List.map, List.foldl
-            import List as L               -- L.map, L.foldl
+            import List
+            import List as L
 
-            import List exposing (..)               -- map, foldl, concat, ...
-            import List exposing ( map, foldl )     -- map, foldl
+            import List exposing (..)
+            import List exposing ( map, foldl )
 
-            import Maybe exposing ( Maybe )         -- Maybe
-            import Maybe exposing ( Maybe(..) )     -- Maybe, Just, Nothing
-            import Maybe exposing ( Maybe(Just) )   -- Maybe, Just
+            import Maybe exposing ( Maybe )
+            import Maybe exposing ( Maybe(..) )
             """
       , haskell =
             """
@@ -429,7 +374,6 @@ examples =
 
             import Data.Maybe ( Maybe )
             import Data.Maybe ( Maybe(..) )
-            import Data.Maybe ( Maybe(Just) )
             """
       }
     , { description = "Type Annotations"
@@ -457,8 +401,8 @@ examples =
             factorial n =
               Data.List.product [1..n]
 
-            distance :: Point `{ x :: Float, y :: Float }` `-> Float`
-            distance (Point {x,y}) =
+            distance :: Point { x :: Float, y :: Float } -> Float
+            distance Point {x,y} =
               sqrt (x^2 + y^2)
             """
       }
@@ -485,13 +429,34 @@ examples =
 
             info :: (Name, Age)
             info =
-              (`"``Steve``"``, 28)`
+              ("Steve", 28)
 
             data Point = Point { x :: Float, y :: Float }
 
             origin :: Point
             origin =
               Point { x = 0, y = 0 }
+            """
+      }
+    , { description = "Custom Types"
+      , elm =
+            """
+            type User
+              = Regular String Int
+              | Visitor String
+            """
+      , haskell =
+            """
+            data User
+              = Regular String Int
+              | Visitor String
+
+            > In Haskell these are called ‘Algebraic Data Types’ (ADT).
+            > If you only have a single constructor, you can use ‘newtype’.
+            > This is super useful for creating custom versions of primitive
+            > types, See: http://dev.stephendiehl.com/hask/#newtype-deriving
+
+            newtype PersonId = PersonId Int
             """
       }
     , { description = "JavaScript Interop"
