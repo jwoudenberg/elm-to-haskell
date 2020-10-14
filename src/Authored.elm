@@ -45,23 +45,23 @@ examples =
       , haskell =
             Just
                 """
-                            
-                            
-
-                                                                  
-                             
-
-                              
-                              
-
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
                 "\\
                 \\This is not at all useful for holding JSON or\\n
                 \\content that has "quotation marks".\\n
                 \\"
-
-                                           
-                                   
-                              
+                |
+                |
+                |
+                |
                 """
       }
     , { description = "Lists"
@@ -74,7 +74,7 @@ examples =
       , haskell =
             Just
                 """
-
+                |
                 1 : [2,3,4]
                 1 : 2 : 3 : 4 : []
                 """
@@ -109,29 +109,29 @@ examples =
       , haskell =
             Just
                 """
-                                                                   
-
-                                 
-                         
-                                      
-                         
-                    
-                     
-
-                             
-                               
-                               
-
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
                 case xs of
                   hd : tl ->
                     Just (hd,tl)
                   [] ->
                     Nothing
-
-                         
-                        
-                        
-                                            
+                |
+                |
+                |
+                |
+                |
                 """
       }
     , { description = "Union Types"
@@ -237,9 +237,9 @@ examples =
       , haskell =
             Just
                 """
-
-
-
+                |
+                |
+                |
                 squares =
                   fmap (\\n -> n^2) [1..100]
                 """
@@ -268,14 +268,14 @@ examples =
                 m ? default = maybe default id m
 
 
-
+                |
 
                 viewNames1 names =
                   Data.List.intercalate ", " (Data.List.sort names)
 
                 viewNames2 =
                   Data.List.intercalate ", " . Data.List.sort
-                  
+
 
                 > `.` does in Haskell as `<<` does in Elm.
                 """
@@ -290,7 +290,7 @@ examples =
                 4 ^ 2
             in
             twentyFour + sixteen
-              
+
             let
               ( three, four ) =
                 ( 3, 4 )
@@ -298,7 +298,7 @@ examples =
                 sqrt (a^2 + b^2)
             in
               hypotenuse three four
-              
+
             let
               name : String
               name =
@@ -312,22 +312,22 @@ examples =
       , haskell =
             Just
                 """
-                   
-                              
-                         
-                           
-                         
-                  
-                                    
-                  
-                   
-                                   
-                            
-                                  
-                                    
-                  
-                                       
-                  
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
                 let
                   name :: String
                   name =
@@ -369,18 +369,18 @@ examples =
       , haskell =
             Just
                 """
-                                       
-                            
-                            
-
-                                 
-                             
-
-                               
-
-                                   
-                                 
-
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
+                |
                 23 + 19    :: Number t => t
                 2.0 + 1    :: Float
 
@@ -389,9 +389,9 @@ examples =
 
                 quot 100 2  :: Int
                 1 / 2       :: Float
-
-                                             
-                                                       
+                |
+                |
+                |
                 """
       }
     , { description = "Modules"
@@ -446,7 +446,7 @@ examples =
                 answer :: Int
                 answer =
                   42
-                    
+
                 factorial :: Int -> Int
                 factorial n =
                   Data.List.product [1..n]

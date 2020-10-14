@@ -97,22 +97,43 @@ viewExample example =
         linesHaskell =
             case example.haskell of
                 Nothing ->
-                    []
+                    List.map (\_ -> "|") linesElm
 
                 Just code ->
                     toLines code
 
         linesHtmlElm =
-            List.map viewLineLeft (fillUpToMax linesElm)
+            map2WithMaybes
+                (\maybeElmLine _ ->
+                    case maybeElmLine of
+                        Just elmLine ->
+                            viewLineLeft elmLine
+
+                        Nothing ->
+                            viewLineLeft ""
+                )
+                linesElm
+                linesHaskell
 
         linesHtmlHaskell =
-            List.map viewLineRight (fillUpToMax linesHaskell)
+            map2WithMaybes
+                (\maybeElmLine maybeHaskellLine ->
+                    case ( maybeElmLine, maybeHaskellLine ) of
+                        ( Just elmLine, Just haskellLine ) ->
+                            if String.trim haskellLine == "|" then
+                                viewGrayLineRight elmLine
 
-        numLines =
-            max (List.length linesElm) (List.length linesHaskell)
+                            else
+                                viewGrayLineRight elmLine
 
-        fillUpToMax lines =
-            [ "" ] ++ lines ++ List.repeat (1 + numLines - List.length lines) ""
+                        ( _, Just haskellLine ) ->
+                            viewLineRight haskellLine
+
+                        _ ->
+                            viewLineRight ""
+                )
+                linesElm
+                linesHaskell
     in
     Html.section []
         [ Html.h2
@@ -144,23 +165,6 @@ toLines : String -> List String
 toLines string =
     unindent string
         |> String.split "\n"
-        |> dropLeadingEmptyLines
-        |> List.reverse
-        |> dropLeadingEmptyLines
-        |> List.reverse
-
-
-dropLeadingEmptyLines : List String -> List String
-dropLeadingEmptyLines lines =
-    case lines of
-        [] ->
-            []
-
-        "" :: rest ->
-            rest
-
-        _ ->
-            lines
 
 
 viewLineLeft : String -> Html msg
@@ -185,6 +189,18 @@ viewLineRight line =
         [ Html.text line ]
 
 
+viewGrayLineRight : String -> Html msg
+viewGrayLineRight line =
+    Html.span
+        [ Attr.css
+            [ Css.paddingRight (Css.px 10)
+            , lineStyles
+            , Css.color (Css.hex "aaa")
+            ]
+        ]
+        [ Html.text line ]
+
+
 lineStyles : Css.Style
 lineStyles =
     Css.batch
@@ -201,3 +217,11 @@ codeStyles =
         , Css.display Css.block
         , Css.width (Css.pct 50)
         ]
+
+
+map2WithMaybes : (Maybe a -> Maybe b -> c) -> List a -> List b -> List c
+map2WithMaybes f list1 list2 =
+    List.map2
+        f
+        (List.map Just list1 ++ List.repeat (List.length list2 - List.length list1) Nothing)
+        (List.map Just list2 ++ List.repeat (List.length list1 - List.length list2) Nothing)
