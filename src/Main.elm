@@ -358,6 +358,7 @@ lineStyles =
         [ Css.display Css.block
         , Css.borderBottom3 (Css.px 1) Css.solid (Css.hex "#ddd")
         , Css.marginTop (Css.px 3)
+        , Css.after [ Css.property "content" "' '" ]
         ]
 
 
