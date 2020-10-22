@@ -5,6 +5,7 @@ import Browser
 import Browser.Dom as Dom
 import Browser.Navigation as Navigation
 import Css
+import Css.Global
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attr
 import Html.Styled.Events as Events
@@ -59,11 +60,16 @@ main =
             \model ->
                 { title = "Elm to Haskell"
                 , body =
-                    [ Authored.examples
+                    [ Css.Global.global
+                        [ Css.Global.body
+                            [ Css.property "background-image" "linear-gradient(to right, #1293D8 0%, #1293D8 50%, #5E5184 50%, #5E5184 100%)"
+                            ]
+                        ]
+                    , Authored.examples
                         |> List.filter (isMatch model.searchTerm)
                         |> view model.searchTerm
-                        |> Html.toUnstyled
                     ]
+                        |> List.map Html.toUnstyled
                 }
         , subscriptions = \_ -> Sub.none
         , onUrlRequest =
@@ -101,24 +107,8 @@ isMatch term example =
 
 view : String -> List Authored.Example -> Html Msg
 view searchTerm examples =
-    Html.div
-        [ Attr.css
-            [ Css.minWidth (Css.vw 100)
-            , Css.minHeight (Css.vh 100)
-            , Css.backgroundColor (Css.hex "#5E5184")
-            , Css.position Css.absolute
-            ]
-        ]
+    Html.div []
         [ Html.div
-            [ Attr.css
-                [ Css.position Css.absolute
-                , Css.width (Css.pct 50)
-                , Css.height (Css.pct 100)
-                , Css.backgroundColor (Css.hex "#1293D8")
-                ]
-            ]
-            []
-        , Html.div
             [ Attr.css
                 [ Css.width (Css.px 900)
                 , Css.margin2 Css.zero Css.auto
