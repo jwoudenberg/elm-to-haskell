@@ -5,3 +5,11 @@
 A Haskell syntax cheatsheet for those familiar with Elm.
 
 View it at [elm-to-haskell.jasperwoudenberg.com](https://elm-to-haskell.jasperwoudenberg.com/).
+
+## Development
+
+To start a code-watcher, run:
+
+```
+elm-live src/Main.elm --pushstate --dir public -- --output public/main.js
+```
