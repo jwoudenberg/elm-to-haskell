@@ -51,18 +51,18 @@ examples =
             """
       , haskell =
             """
-            True  : Bool
-            False : Bool
+            True  :: Bool
+            False :: Bool
 
-            42    : number  -- Int or Float depending on usage
-            3.14  : Float
+            42    :: Num a
+            3.14  :: Float
 
-            'a'   : Char
-            "abc" : String
+            'a'   :: Char
+            "abc" :: String
 
             "\\
-            \\This is not at all useful for holding JSON or\\n
-            \\content that has \\"quotation marks\\".\\n
+            \\This is not at all useful for holding JSON or\\n\\
+            \\content that has \\"quotation marks\\".\\n\\
             \\"
 
             True && not (True || False)
