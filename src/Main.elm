@@ -294,6 +294,7 @@ viewExample example =
                 , Css.backgroundColor (Css.hex "#efefef")
                 , Css.borderRadius (Css.px 3)
                 , Css.boxShadow4 Css.zero Css.zero (Css.px 10) (Css.hex "#777")
+                , Css.overflow Css.hidden
                 ]
             ]
             [ Html.code [ Attr.css [ codeStyles ] ] linesHtmlElm
